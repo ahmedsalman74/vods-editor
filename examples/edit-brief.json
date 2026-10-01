@@ -1,0 +1,15 @@
+{
+  "source": {"url": null, "platform": null, "role": "editing-source"},
+  "outputs": [],
+  "style": {"visual": null, "font": null, "palette": [], "zoom": null, "shake": null},
+  "selected_clips": [],
+  "clip_order": [],
+  "hook": {"source_start": null, "source_end": null, "concept": null},
+  "intro": null,
+  "outro": null,
+  "source_fps": null,
+  "protected_regions": [],
+  "resolve_project": null,
+  "approval": {"scope": null, "style_preview_approved": false, "existing_project_changes_authorized": false},
+  "validation": {"measured": [], "perceptual": [], "pending": []}
+}

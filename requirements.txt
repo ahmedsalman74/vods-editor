@@ -1,0 +1,5 @@
+mcp>=1.30,<2
+yt-dlp[default]>=2026.8.19
+numpy>=2,<3
+Pillow>=11,<13
+PyYAML>=6,<7

@@ -1,0 +1,42 @@
+{
+  "name": "davinci-resolve-lua-mcp",
+  "version": "0.2.0",
+  "private": true,
+  "description": "Control the free edition of DaVinci Resolve 21.1 from Claude through a Lua script that runs inside Resolve. macOS and Windows (experimental), no Studio licence, no network.",
+  "license": "MIT",
+  "author": "Saad Khan",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/saadk408/davinci-resolve-lua-mcp.git"
+  },
+  "homepage": "https://github.com/saadk408/davinci-resolve-lua-mcp#readme",
+  "bugs": "https://github.com/saadk408/davinci-resolve-lua-mcp/issues",
+  "engines": {
+    "node": ">=20"
+  },
+  "main": "server/index.js",
+  "scripts": {
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "build": "npm run typecheck && esbuild src/index.ts --bundle --platform=node --format=cjs --target=node20 --outfile=server/index.js --log-level=warning",
+    "test": "node --import tsx --test tests/*.test.ts",
+    "prebundle": "node -e \"require('node:fs').mkdirSync('dist', { recursive: true })\"",
+    "bundle": "mcpb validate . && mcpb pack . dist/davinci-resolve-lua-mcp.mcpb && mcpb info dist/davinci-resolve-lua-mcp.mcpb && node tests/check_bundle.mjs dist/davinci-resolve-lua-mcp.mcpb"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/server": "^2.0.0",
+    "zod": "^4.2.0"
+  },
+  "overrides": {
+    "@anthropic-ai/mcpb": {
+      "@inquirer/prompts": "^8.7.2"
+    }
+  },
+  "devDependencies": {
+    "@anthropic-ai/mcpb": "^2.1.2",
+    "@modelcontextprotocol/client": "^2.0.0",
+    "@types/node": "^20.19.0",
+    "esbuild": "^0.28.2",
+    "tsx": "^4.23.0",
+    "typescript": "^7.0.2"
+  }
+}
