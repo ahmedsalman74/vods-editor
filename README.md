@@ -91,7 +91,7 @@ Open this repository in **Claude Code or Codex** and send:
 
 > Use vods-editor with this video: [paste my video link]. Make a short vertical highlight and a landscape montage if the footage supports it. Let me select the clips, caption style, colors, zoom/shake intensity and intro/outro through real choice controls. Start with metadata and a shortlist, then show a short style preview. Ask before changing my existing Resolve project.
 
-The companion **video-editor-salman** adds finishing guidance for captions, motion, hooks and output review. Hosts without choice controls get a clear text fallback; this repo does not pretend Markdown checkboxes are interactive or ship a drag-and-drop editor.
+The companion **video-editor-salman** includes the complete caption/motion engine, templates, styles and checks, with stream-specific hook and boundary guidance. Hosts without choice controls get a clear text fallback; this repo does not pretend Markdown checkboxes are interactive or ship a drag-and-drop editor.
 
 **Claude Desktop:** `--client claude-desktop` connects MCP tools to normal Desktop chat. Use Desktop's **Code** mode / Claude Code for the complete local download, analysis and skill workflow. The installer does not install skills into normal Desktop chat. Studio's built-in setup can configure supported assistants directly.
 
@@ -124,26 +124,22 @@ See the [workflow guide](skills/vods-editor/references/workflow.md), [style and 
 
 ```text
 skills/vods-editor/          Source selection, analysis, edit planning and review
-skills/video-editor-salman/  Original caption/motion/finishing guidance
+skills/video-editor-salman/  Full motion/caption engine, templates, styles and checks
 workflow.py                 Download, Whisper analysis and frame extraction
 scripts/                    Setup, read-only doctor and local engine importer
 vendor/resolve-lua-mcp/     Pinned MIT-licensed community MCP source and Lua bridge
 docs/                       Free/Studio setup, troubleshooting and original visuals
 ```
 
-Your videos, profiles, cookies, client configuration, downloaded engines and generated analysis are not included. They belong in the selected data directory or git-ignored `.local`.
+Your videos, profiles, cookies, client configuration, model weights and generated analysis are not included. They belong in the selected data directory or git-ignored `.local`.
 
-### Optional privately obtained engine
+### Complete motion/caption engine
 
-The separate `video-editor-bassam` ZIP supplied during development had no redistribution license. Its original code, fonts and assets are **not** published or relicensed here. The public `video-editor-salman` skill is original finishing guidance, not a copy of that renderer.
+`skills/video-editor-salman` now includes the complete supplied engine formerly named `video-editor-bassam`: Arabic instructions, processing scripts, Remotion templates, styles/assets and validation tools. The stream integration rules used by the installed workflow are included. No extra engine ZIP is required.
 
-If you have a copy you are entitled to use, import it for local use only:
+After the main setup, follow [engine runtime preparation](skills/video-editor-salman/references/engine.md). The assistant must check/install the selected renderer's dependencies and prepare the job inputs before rendering. The `--analysis` option alone does not install all engine dependencies. Templates require adaptation for the selected landscape/vertical layout and source FPS; a pasted link is an assisted setup entry point, not an instant render.
 
-```powershell
-py -3.12 scripts/import_local_engine.py "D:\path\video-editor-bassam.zip"
-```
-
-It is extracted under `.local/engines/video-editor-salman`, preserving original attribution. Importing does not execute/install the engine or replace either public skill. The assistant must read its instructions and check its dependency licenses separately.
+The engine retains its original attribution and asset notices. **It is not covered by the root MIT license**; no blanket code license was included with the supplied copy. See [engine provenance](skills/video-editor-salman/PROVENANCE.md). Public availability should not be described as an unrestricted open-source grant for that imported code.
 
 ## Development and license
 
@@ -156,4 +152,4 @@ npm run build
 
 CI tests helpers and config preservation, then type-checks/builds the vendored bridge. It cannot test Resolve on GitHub-hosted runners. Windows is the supported setup path; other platforms have not been validated by this project.
 
-Our code and skills are [MIT licensed](LICENSE). The vendored bridge remains copyright Saad Khan under its [MIT license](vendor/resolve-lua-mcp/LICENSE); see [third-party notices](THIRD_PARTY_NOTICES.md). Resolve, Claude, Codex, platform content and optional engines retain their respective terms. This is a community project, not an official Blackmagic, Anthropic or OpenAI product.
+The original workflow helpers and `vods-editor` skill are [MIT licensed](LICENSE), excluding the imported `skills/video-editor-salman` directory as explained in its provenance notice. The vendored bridge remains copyright Saad Khan under its [MIT license](vendor/resolve-lua-mcp/LICENSE); see [third-party notices](THIRD_PARTY_NOTICES.md). Resolve, Claude, Codex, platform content and optional engines retain their respective terms. This is a community project, not an official Blackmagic, Anthropic or OpenAI product.

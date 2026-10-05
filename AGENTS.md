@@ -26,7 +26,7 @@ ffmpeg -version
 ffprobe -version
 ```
 
-Requirements are Python 3.11+ (3.12 recommended), Node.js 20+ (Free edition only), Git, and FFmpeg with ffprobe. For anything missing, tell the user what you will install and roughly how big it is, get a yes, then run the matching command:
+Requirements are Python 3.11+ (3.12 recommended), Node.js 20+ (Free MCP and the included motion engine), Git, and FFmpeg with ffprobe. For anything missing, tell the user what you will install and roughly how big it is, get a yes, then run the matching command:
 
 ```powershell
 winget install -e --id Python.Python.3.12
@@ -60,6 +60,10 @@ Adjust `--edition` (`free`/`studio`), `--client` (`claude-code`, `codex`, `claud
 
 If setup stops because a skill or a different `davinci-resolve` MCP entry already exists, explain what would be replaced and ask before re-running with `--replace`. The installer backs up replaced entries in `.local/backups`, but it does not merge customizations.
 
+## 4b. Prepare the included motion engine
+
+The full `video-editor-salman` engine is included and copied by setup. Follow [engine runtime preparation](skills/video-editor-salman/references/engine.md), using Git Bash and the activated repository Python. Check dependencies, then install missing engine packages within the user-authorized setup scope. `--analysis` only covers the VOD helper, not every engine dependency. Remotion setup requires an actual job's caption/theme inputs and installs project-local packages on first use. Never report full renderer readiness from an MCP connection test alone.
+
 ## 5. Connect Resolve
 
 **Free:**
@@ -82,11 +86,11 @@ Finish with a short summary of what was installed, where the data folder is, and
 
 ## 7. When editing
 
-After the restart, load the `vods-editor` skill and follow it. It covers source choice, download, analysis, clip selection, style choices, preview, Resolve assembly and delivery checks. The `video-editor-salman` skill adds caption and motion guidance.
+After the restart, load the `vods-editor` skill and follow it. It covers source choice, download, analysis, clip selection, style choices, preview, Resolve assembly and delivery checks. The `video-editor-salman` skill supplies the full caption/motion engine, templates, styles and checks. Load its stream integration reference before applying talking-head defaults to gameplay.
 
 ## Limits and safety
 
 - Do not enter passwords, import browser cookies, or download content the user has no right to use.
 - Do not install Resolve, buy licenses, or change system settings.
 - Ask before changing an existing Resolve project, and never save or switch projects as a connection test.
-- The motion engine previously called `video-editor-bassam` is **not** in this repository. A user who owns a copy can import it with `scripts/import_local_engine.py` (see the README). Without it, use Resolve/Fusion and FFmpeg for motion and captions.
+- The supplied engine formerly named `video-editor-bassam` is included under `video-editor-salman`. Preserve its source/asset notices and do not claim the root MIT license covers it. See its provenance notice. Its inclusion does not install runtimes or prove all rendering paths are validated.

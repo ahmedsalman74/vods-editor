@@ -1,0 +1,34 @@
+<!DOCTYPE html><html><head><meta charset="utf-8">
+<style>html,body{margin:0;background:#000}canvas{display:block}</style></head><body>
+<canvas id="cv"></canvas>
+<script>
+const C=document.getElementById('cv'), X=C.getContext('2d');
+function hx(h){h=h.replace('#','');if(h.length===3)h=h.split('').map(c=>c+c).join('');
+  return [0,2,4].map(i=>parseInt(h.substr(i,2),16));}
+function rgba(hex,a){const c=hx(hex);return `rgba(${c[0]},${c[1]},${c[2]},${a})`;}
+let _G=null;
+function grain(){ if(_G)return _G;
+  const s=180, c=document.createElement('canvas'); c.width=c.height=s;
+  const g=c.getContext('2d'), d=g.createImageData(s,s);
+  for(let i=0;i<d.data.length;i+=4){ const v=200+Math.random()*55;
+    d.data[i]=d.data[i+1]=d.data[i+2]=v; d.data[i+3]=Math.random()*26; }
+  g.putImageData(d,0,0); _G=X.createPattern(c,'repeat'); return _G; }
+/* الخلفية الحيّة — نفس معادلة الفيديو، بمواضع نسبية فتشتغل بأي مقاس */
+window.bg=(w,h,t,TH)=>{
+  C.width=w; C.height=h; _G=null;
+  const base=X.createLinearGradient(0,0,0,h);
+  base.addColorStop(0,'#1A2026'); base.addColorStop(0.5,'#151A1F'); base.addColorStop(1,'#101317');
+  X.fillStyle=base; X.fillRect(0,0,w,h);
+  const R=Math.hypot(w,h)/Math.hypot(1080,1920);
+  const b1=0.5+0.5*Math.sin(t*0.62), b2=0.5+0.5*Math.sin(t*0.44+2);
+  const dx=Math.sin(t*0.23)*70*R, dy=Math.cos(t*0.19)*54*R;
+  [[0.194*w+dx, 0.172*h+dy, 700*R, TH.sky , 0.20+0.12*b1],
+   [0.815*w-dx, 0.792*h-dy, 640*R, '#46687A', 0.14+0.10*b2],
+   [0.519*w,    0.510*h,    540*R, TH.acc , 0.045]].forEach(([cx,cy,r,col,a])=>{
+    const g=X.createRadialGradient(cx,cy,0,cx,cy,r);
+    g.addColorStop(0,rgba(col,a)); g.addColorStop(0.6,rgba(col,a*0.28)); g.addColorStop(1,'rgba(0,0,0,0)');
+    X.fillStyle=g; X.fillRect(cx-r,cy-r,r*2,r*2); });
+  X.save(); X.globalAlpha=0.42; X.fillStyle=grain(); X.fillRect(0,0,w,h); X.restore();
+  return C.toDataURL('image/png');
+};
+</script></body></html>

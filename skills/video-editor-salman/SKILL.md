@@ -1,18 +1,286 @@
 ---
 name: video-editor-salman
-description: Design captions, restrained motion graphics, hooks and finishing treatments for approved stream edits, preserving the shared edit timing and source frame rate.
+description: "مونتاج فيديو عمودي 9:16 لصنّاع المحتوى بالعربي — يشيل السكتات، يفرّغ الكلام بتوقيت كل كلمة، يركّب كابشن عربي متزامن، ويبني موشن قرافيكس ومشاهد وصور حسب أسلوبك، بألوانك وخطك. قص وكابشن سريع أو مونتاج كامل. يشتغل على ماك وويندوز. استخدمه لما يقول المستخدم \"عدّل هذا الفيديو\"، \"مونتج المقطع\"، \"شيّل السكتات\"، \"ركّب كابشن\"، \"حوّل الفيديو لريل\"، \"ابي موشن قرافيكس\"، أو يرسل فيديو كلام ويطلب مونتاجاً. Use for Arabic talking-head video editing: silence cutting, word-timed Arabic captions, motion graphics, 9:16 reels."
 ---
 
-This is the original open-source finishing skill in this repository. It is not a redistributed copy of the separately obtained third-party engine previously called video-editor-bassam. It gives the assistant an editing procedure; it does not bundle a motion renderer. Use verified Resolve/Fusion or available FFmpeg capabilities. An optional local engine can be imported separately; read [engine integration](references/engine.md) when one is requested.
+# مونتاج الفيديو — بلا برنامج مونتاج
 
-Read the current job's edit brief and the adjacent [VOD editing choices and quality guide](../vods-editor/references/choices-quality.md). Read references/local-install.md if present for configured paths. Reuse the selected clip order, source-to-output timing, aspect ratio, source FPS, facecam/gameplay crop and protected HUD/face regions.
+## تحديث الاختيارات ومقاطع البث
 
-Use real choice controls where the host offers them. Offer a small set of caption/font/palette examples and separate off/subtle/strong zoom and shake choices. Keep unknown preferences unknown. Render a representative short preview before expanding an unapproved style. Avoid repetitive prompts after the user has approved a style for the job.
+استخدم أداة `AskUserQuestion` عندما تكون متاحة للاختيارات العادية بدل طلب كتابة أرقام الجمل أو المقاطع. اعرض أمثلة فعلية للأسلوب والخط والألوان، وخيارات مستقلة للزوم وهزّة الشاشة. لا تدّعي وجود قوائم أو أزرار إذا الواجهة لا تدعمها. حافظ على الاختيارات المحفوظة واسأل فقط عن الناقص أو المختلف.
 
-Build the hook from verified footage and preserve the setup/payoff. Keep intros short and motivated; retain complete words, laughs and reactions at every join and at the ending. Use restrained motion with easing and a clean return to neutral. Do not animate captions, facecam and gameplay aggressively at the same time. Do not fabricate ammo counts, scores or other gameplay facts for decorative graphics.
+عند مونتاج ألعاب أو بث، أو عند العمل بعد `vods-editor`، اقرأ [stream-integration.md](references/stream-integration.md) قبل الإنتاج. هذه الإضافة مخصّصة للبث وتقدّم على افتراضات فيديو الكلام عند التعارض، خصوصاً حذف السكوت، كثافة المشاهد، الكادر، ومعدل الإطارات. راجع الحركة والهوك وبداية ونهاية كل قصّة على الفيديو المصدّر نفسه.
 
-Choose the rendering route from actual available tools. Look up Resolve API signatures before applying effects; Studio-only effects are not available through a Free bridge. If a requested effect is unsupported, offer a supported substitute before the full render. Do not claim an external template exists without checking it. Optional third-party renderers carry their own installation and licensing requirements.
+المونتاج كله كود: ffmpeg يقص، والتفريغ يعطي توقيت كل كلمة، ومحرّك رسم (ريموشن) يركّب الكابشن والرسومات فوق الفيديو.
+المخرَج ملف MP4 واحد جاهز للنشر، ومعه ملف ترجمة ونص.
 
-Correct captions against audio evidence; flag uncertain speech rather than treating guesses as exact quotes. Verify Arabic shaping/direction and timing in the exported video. Retiming an edit requires retiming captions, sound effects and graphic cues together. Do not silently reduce 60 fps footage to a renderer's 30 fps default.
+> **المراجع — تُقرأ عند خطوتها:**
+> `references/onboarding.md` (أسئلة البداية) · `references/rules.md` (القواعد — **اقرأها كاملة مرة وحدة قبل أول مشهد**) ·
+> `references/scenes.md` (تصميم المشاهد) · `references/sfx.md` (الأصوات) · `references/generated-images.md` (الصور المولّدة) ·
+> `styles/<الأسلوب>/…` (دليل الأسلوب اللي اختاره) · `styles/IDEAS.md` (أفكار العوالم وكلمات بنترست) ·
+> `references/light-engine.md` (المحرّك الخفيف — بديل لو ريموشن ما اشتغل).
 
-Use the same EDL for final video and Resolve timeline. State any prerendered graphics that are not individually editable in Resolve. Inspect actual rendered boundaries, first/last ten seconds and all added motion at playback speed. Distinguish measured audio checks from listening; if audio perception is unavailable, mark it pending. Deliver versioned review files and specific revision choices. Preserve source and previous exports. Do not publish without an explicit request.
+## مكانين لا تخلط بينهم
+| | وين | وش فيه |
+|---|---|---|
+| **مجلد المهارة** | هذا المجلد | الأدوات والقواعد — **للقراءة فقط، لا تكتب فيه شي** |
+| **مجلد بياناته** | `~/Documents/video-editor-salman` (أو `VES_HOME`؛ مع دعم المسار القديم و`VEB_HOME`) — `scripts/_paths.py` يعرّفه | `profile.json` (هويته وتفضيلاته) · `voice.md` (لغته) · `mechanisms.json` + `LEDGER.md` (سجل آلياته) · `dialect.json` (لهجته) · `sounds/` (مكتبة أصواته) · `refs/` (مراجعه) · `projects/<اسم المقطع>/` (مجلدات الشغل) |
+
+---
+
+## ⛔ أسلوبك مع المستخدم — قبل أي شي
+
+**أنت اللي تجهّز، مو هو.** يمكن ما يعرف شنو ffmpeg ولا يبي يعرف. ممنوع تعطيه أوامر ينفّذها.
+- **لا تعرض عليه قائمة متطلبات** — افحص بنفسك، وإذا ناقص شي قل: «ناقصني أداتين أجهّزهم لك، ياخذ ١٠ دقايق — أبدأ؟» وبعد موافقته نزّلها أنت.
+- **بلا مصطلحات.** لا تقول «puppeteer» ولا «كوديك» — قل «أداة ترسم» و«جودة الفيديو».
+- **قل له وين احنا كل خطوة** وقدّر الوقت: «شلت السكتات — الفيديو صار ٤٦ ثانية بدل ٩٨. الحين أفرّغ كلامك، ٣ دقايق.»
+- **سؤال واحد بكل مرة.**
+- **لا تسلّم بلا ما تريه** — بعد كل مرحلة مهمة، لقطة أو ملخص.
+- **كلّمه بلهجته** وبعربي واضح — لا ترجمة حرفية ولا مصطلحات إنجليزية بلا داعي.
+- **كل رسائلك بلغته** — مو الأسئلة بس: تحديثات التقدّم («شلت السكتات…»، «فرّغت كلامك…») وملخص التسليم كلها بنفس اللغة اللي كتب فيها طلبه. لو كتب بالعربي، ولا جملة بالإنجليزي — حتى الجمل القصيرة بين الأوامر («الحين أحفظ تفضيلاتك» مو «Now add prefs»).
+- **لا تذكر له أسماء مواقع ولا برامج** (مواقع الصور والأصوات، برامج توليد الصور): «مصادر مجانية موثوقة» و«نموذج ذكاء اصطناعي».
+- **لا تقترح عليه شي من ذاكرتك عن غيره** — ألوان، خطوط، أساليب. اقتراحاتك من ملفات المهارة وإجاباته بس.
+
+---
+
+## الخطوة 0 — جهّز الجهاز (أول مرة)
+
+```bash
+bash scripts/00_setup.sh            # يكتشف الجهاز (ماك M · ماك إنتل · ويندوز) ويطبع الجاهز والناقص وحجمه
+```
+- «كل شي جاهز» → لا تذكر الموضوع، كمّل.
+- ناقص → قل له بجملة وش بتنزّل (السطر المطبوع فيه الحجم) وكم ياخذ، خذ موافقته، ثم:
+```bash
+bash scripts/00_setup.sh --install
+```
+- **ماك:** يحتاج Homebrew — لو مو موجود، أعطه السطر اللي يطبعه السكربت ينسخه بالتيرمنال (هذا الشي الوحيد اللي يسويه بيده). وأدوات Xcode تطلع نافذة من أبل يضغط فيها «Install».
+- **ويندوز:** ينزّل عبر winget. بعد تنزيل أداة أساسية (ffmpeg · Node · Python) **لازم يسكّر تطبيق كلود ويفتحه** عشان يشوفها.
+- لو فشل شي، قل له الحل بجملة بشرية، بلا لصق رسالة الخطأ.
+
+محرّك الرسم (ريموشن) ينزل لحاله أول مشروع (~500 ميقا) — قل له قبلها.
+
+## الخطوة 0.5 — أسئلة البداية
+
+**ما فيه `profile.json` بمجلد بياناته؟** ← `references/onboarding.md` كامل (مرة وحدة بس).
+  حتى لو تعرف المستخدم من ذاكرة ثانية أو مشاريع سابقة — الملف هو المرجع، مو الذاكرة.
+**فيه؟** ← سؤالين: وش يبي بهالمقطع (قص وكابشن · خفيف · كامل)؟ ونفس أسلوبه ولا شي مختلف؟
+**واقرأ `prefs` بملفه قبل كل قرار** — موسيقى، صور، قيود، طريقة تصويره. تفضيلاته تغلب أي افتراض بالقواعد.
+
+---
+
+## الخطوة 1 — مجلد الشغل والهوية
+
+```bash
+python3 -c "import sys;sys.path.insert(0,'scripts');import _paths;_paths.ensure();print(_paths.data('projects'))"
+```
+أنشئ `<projects>/<اسم المقطع>/` = `<work>`، وانسخ له:
+- `profile.json` ← `<work>/theme.json` (الهوية تنقرأ من هنا — القاعدة ٢١).
+- الشعار ← `<work>/logo.png` (لو عنده).
+- `<work>/style.json` ← `{"style": "<أسلوبه>"}` (simple · collage · documentary · board).
+
+**⛔ الكادر — «الزوم قاصّ وجهي» أكثر شكوى، وعلاجها مقبضان بـtheme.json:**
+| المقبض | يتحكم بـ | 0 = | 1 = |
+|---|---|---|---|
+| `zoomAnchor` | من وين يُقص الزوم من الفيديو الأصلي | من فوق | من تحت |
+| `faceAnchor` | من وين يُقص الفيديو داخل كرت مصغّر | من فوق | من تحت |
+الافتراضي `0.30` لمن وجهه بوسط الكادر. **أغلب الناس وجههم بالثلث الأعلى** — نزّلهما لـ`0.0`–`0.15`.
+و`"noZoom": true` يطفي الزوم (غالباً للي يصوّر قريب). **الأفضل: `12_face_guard.js scan` يحسبها من وجهه.**
+
+**التدرّج اللوني (`grade`) مطفي** — لا تشغّله إلا بطلبه الصريح (القاعدة ٤).
+
+## الخطوة 2 — خذ الفيديو
+
+| الطريقة | متى | شلون |
+|---|---|---|
+| **ملف على جهازه** ← الأفضل | دائماً إن أمكن | يعطيك المسار، تنسخه `<work>/src.mov` |
+| **رابط قوقل درايف** | يصوّر بالجوال والدرايف يرفع تلقائياً | المشاركة «أي شخص لديه الرابط»، ثم:<br>`curl -sL "https://drive.usercontent.google.com/download?id=<ID>&export=download&confirm=t" -o <work>/src.mov` |
+**4K أفضل** (الزوم يُقص من الأصل بلا خسارة وضوح)، و**1080p يشتغل عادي** — لا ترفضه ولا تطلب يعيد التصوير.
+تحقق: `ffprobe -v error -show_entries format=duration -of csv=p=0 <work>/src.mov`
+
+---
+
+## الخطوات 3-11 — الإنتاج
+
+### 3) خطة القص
+```bash
+python3 scripts/01_cut_plan.py <work>
+```
+قل له كم انشال: «شلت ٥٢ ثانية سكوت — الفيديو صار ٤٦ بدل ٩٨.»
+
+### 4) التفريغ بتوقيت الكلمة
+```bash
+python3 scripts/01b_transcribe.py <work> [--lang ar]    # ماك M: mlx-whisper · غيره: faster-whisper — large-v3 → a.json
+```
+⛔ **a.wav للتفريغ فقط** (16 كيلو أحادي) — ممنوع بالتجميع النهائي، يمسح نص طيف صوته (القاعدة ١٩).
+ياخذ دقايق — شغّله بالخلفية وقل له كم يتوقع. أول مرة ينزل النموذج (~3 قيقا).
+التفريغ يغلط بالعامية (~7٪) — **التصحيح إلزامي**، وكل كلمة تتكرر بتصحيحاتك ضِفها لـ`dialect.json` بمجلد بياناته.
+
+### 5) التصحيح والكابشن
+اقرأ `a.json`، صحّح كل جملة (ولو عنده سكربت مكتوب، طابق عليه)، واكتب `<work>/fixes.json`:
+```json
+{ "fix": [["كل","شي","تشوفه"], ["الكابشن","الزوم"]], "hot": ["تشوفه","الزوم"] }
+```
+`hot` = الكلمات اللي تنحبس بقرص التمييز. **عدد كلمات كل جملة = عدد كلمات التفريغ لنفس الجملة** وإلا تختل التوقيتات.
+```bash
+python3 scripts/02_captions.py <work>
+```
+
+### 5.5) اعرض عليه النص — وشيل أي جملة ما عجبته ← لا تتخطّاها
+```bash
+python3 scripts/10_script_edit.py <work> show     # الأرقام داخلية؛ اعرض الجمل للمستخدم كاختيارات بأداة الأسئلة
+python3 scripts/10_script_edit.py <work> dupes    # الجمل المعادة: الأولى غلط والثانية تصحيح — اقترح حذف الأولى
+python3 scripts/10_script_edit.py <work> drop 6 8 # · keep 1 2 5 9 · undo
+```
+**⚠️ سوّها قبل تصميم المشاهد** — الحذف بعدها يزيح كل الأوقات.
+
+### 6) القص والزوم
+```bash
+python3 scripts/03_cut_zoom.py <work>
+node scripts/12_face_guard.js <work> scan     # يكتشف وجهه ويكتب faceAnchor الصحيح
+```
+
+### 🔀 «قص وكابشن بس» (الوضع السريع) — تخطّى ٧ و٨
+اكتب `<work>/mode.json` ← `{"mode": "quick"}` — الفاحص يتخطّى فواحص المشاهد.
+مشروع ريموشن بلا مشاهد: وجهه ملء الإطار + الكابشن + شارة الحساب (+ الزوم لو ما هو `noZoom`).
+`Scenes.tsx` يبقى فاضي كما ينسخه القالب. كمّل من الخطوة ٩.
+**الوضع الخفيف** (`{"mode": "light"}`): نفسه + أصوات خفيفة مربوطة بكلمات (`05_sfx.py`) — بلا مشاهد.
+**المونتاج الكامل** (`{"mode": "full"}` أو بدون الملف): الخطوات ٧ و٨ كاملة.
+
+### 7) صمّم المشاهد ← أهم خطوة — **اقرأ `references/scenes.md` ودليل أسلوبه كاملين قبل أول مشهد**
+- **الشكل يحمل المعنى** (القاعدة ٣١): استعارة بصرية لما يقوله، لا زينة. اعصف ٣-٤ أفكار لكل جملة.
+- **عالم واحد للمقطع** (`styles/IDEAS.md`) — اعرض عليه ٢-٣ عوالم قبل البناء.
+- **الكثافة**: مشهد كل ١٥ ثانية على الأقل، موزّعة، وبأشكال مختلفة.
+- **الصيغ الأربع** (القاعدة ٧٧): `FULL` · `CARD` · `SIDE` · `NONE`.
+- **الرسم لا يلمس وجهه ولا شعره** — `12_face_guard.js` و`19_scene_audit.py` هما الحكم.
+- **الخط**: عائلة وحدة داخل الرسمة والوزن هو التدرّج (القاعدة ٣٨).
+- **لا تكرّر آلية من آخر مقطعين** — `LEDGER.md` (المرفوض أولاً) و`13_repeat_check.js`.
+- **الصور**: حسب تفضيلاته (القواعد ١٥ و٨٥ و٨٩) — وقيوده على كل فريم (القاعدة ١١).
+- **أفكار المراجع تُقترح مكاناً مكاناً قبل التنفيذ** (القاعدة ٨٨).
+
+**ترتيب العمل بريموشن — لا تتخطّى خطوة:**
+```bash
+bash scripts/04b_remotion.sh <work> setup     # أول مرة بمجلد الشغل (~500 ميقا)
+bash scripts/04b_remotion.sh <work> studio    # افتحه له: http://localhost:3000 — يشوف المقطع حيّاً
+```
+1. المشاهد بـ`<work>/Scenes.tsx` (ينسخ للمشروع مع كل `sync`) — كل مشهد `const A=…, B=…;` بأول سطر، ويستورد عُدّة أسلوبه (`./vox` · `./editorial` · `./board`).
+2. `<work>/formats.json` — صيغة كل مشهد.
+3. `python3 scripts/18_stage_from_scenes.py <work>` — **يبني جدول النوافذ. لا تكتبه بيدك.**
+4. `python3 scripts/19_scene_audit.py <work>` — نوافذ فاضية · جمود · رسم على شعره. **يخرج 3 = لا ترندر.**
+
+### 8) المؤثرات الصوتية — **`references/sfx.md`**
+- بسيط: `sfx.json` ← `scripts/05_sfx.py` (أصوات مركّبة بالكود).
+- كولاج · وثائقي · لوح: `sfx_events.json` ← `styles/collage/mix_sfx.py` (مكتبة أصواته — `sound_add.py` يبنيها).
+- ثم **`05b_sfx_audit.py` يخرج 3 = لا ترندر**. الحدود: ≤ 20/دقيقة · ≥ 1.0 ث بين صوتين · ≤ 3 مرات للصوت · ≤ 2 فوق 4 كيلوهرتز/دقيقة.
+- الصوت الدلالي **عند الكلمة نفسها** من `caps.json`، واسمع الصوت بأذنه لا باسمه (٢٧).
+
+### 9) الرندر
+```bash
+python3 scripts/22_preflight.py <work> --name "<اسم المقطع>"                   # الفواحص كلها قبل الرندر
+bash scripts/04b_remotion.sh <work> render <work>/ad-final.mp4                # وسيط 4:4:4 · 709 موسوم · 14 ميقابت
+bash scripts/04b_remotion.sh <work> render-test <out> 1290-1350                 # مدى فريمات للتجربة
+```
+
+### 10) معايرة الصوت (+ ملف صوتي بالخلفية لو يبي)
+```bash
+bash scripts/06b_master.sh <work> <work>/ad-final.mp4 <work>/ad-master.mp4
+```
+يرفع العلو لمستوى المنصّات (‎-14 LUFS). ولو حطّيت `<work>/bg-audio.mp3` ينضاف تحت كلامه وينخفض تلقائياً كل ما يتكلم.
+**التسمية:** «ملف صوتي بالخلفية» (القاعدة ١٠). ولو ما يبي معايرة («أبيه بنفس صوتي»): كسب صفر.
+
+### 11) ملف الترجمة
+```bash
+python3 scripts/09_srt.py <work> ad-master       # .srt (يوتيوب ولينكدإن) و.txt (نص كلامه لكابشن البوست)
+```
+
+---
+
+## 🚫 الخطوط الحمراء
+
+| ممنوع بلا إذن صريح منه | التفصيل |
+|---|---|
+| **مسّ صورته** | تدرّج لوني · تشبع · تباين · حرارة · سطوع · أي مرشّح — حتى لو دليل هويته يوصي. |
+| **مسّ صوته** | أي ضغط أو معالجة. المسموح: معايرة العلو فقط. |
+| **كسر قيوده** | اللي قالها بأسئلة البداية (القاعدة ١١) — **افحص الفريم، لا تفترض.** |
+| **موسيقى من عندك** | إلا لو طلبها. |
+| **النشر أو الجدولة** | التسليم ملف بس. |
+| **حذف ملفاته أو الكتابة فوقها** | ولا تسمّي التسليم باسم يطابق مصدره. |
+| **تجاوز «هل أنت إنسان؟»** | بأي موقع — ابحث عن مصدر ثاني. |
+
+## ✅ التحقق قبل التسليم (إلزامي)
+```bash
+python3 scripts/22_preflight.py <work> --name "<الاسم>"                    # قبل: 18 · 19 · 05b · 13 · 16 · 23 · 24
+python3 scripts/22_preflight.py <work> --name "<الاسم>" --out <المسلَّم.mp4>  # بعد: + اللون · الصوت · الومضات · معدل البت
+python3 scripts/14_ledger.py                                              # حدّث سجله (بعد التسليم)
+bash scripts/15_board.sh "<الاسم>" "<المسلَّم.mp4>"                         # لوحة الآليات
+```
+**«رندر نجح» ما يعني «سليم» — الجدول هو اللي يعني.**
+- **الوجه:** `node scripts/12_face_guard.js <work> check` — يخرج 3 لو أي نافذة تقصّ شعره أو ذقنه.
+- **العين:** ورقة لقطات (`07_contact_sheet.sh`) تُشاف فعلاً — واعرضها عليه.
+- **الجودة:** الناتج ما ينزل تحت ثلث معدّل بت المصدر.
+
+## التسليم
+- **أثناء المراجعة:** `<اسم المقطع>-نسخة<N>.mp4` — **ولا مرة باسم يطابق المصدر** (يكتب فوقه ويضيع).
+- **بعد ما يعتمد:** `<اسم المقطع>.mp4`، ونفس الاسم لـ`.srt` و`.txt`.
+- اعرض: المدة، كم انشال من السكتات، عدد المشاهد، والعلو النهائي. واذكر إنك ما نشرت شي.
+- **لا تحذف مجلد الشغل** بعد التسليم — غالباً يطلب تعديلاً (القاعدة ٤٨).
+
+## 💰 توفير التوكنز
+1. **جلسة نظيفة لكل فيديو.** 2. **ورقة لقطات بدل صور منفصلة.** 3. **اجمع الأوامر المستقلة بجولة وحدة.**
+4. **شغّل الطويل بالخلفية.** 5. **احفظ `caps.json` و`cut.json`** — أي تعديل لاحق ما يحتاج إعادة تفريغ.
+
+---
+
+## فهرس القواعد — الكامل بـ`references/rules.md`
+**1** المؤثر بلحظة لها معنى · **2** الأرقام حسب تفضيله · **3** الألوان من الثيم · **4** لا تمسّ صورته ولا صوته · **5** صحّح التفريغ ·
+**6** لا تنسب له كلاماً · **7** النص عربي والرسم لاتيني · **8** لا نشر · **9** «ورا الشخص» مرة · **10** الخلفية الصوتية منه ·
+**11** قيوده بالفريم · **12** مشاهد جديدة · **13** الفاحص قبل عينك · **14** فخ الاقتباس بالخط · **15** صوره الثابتة ·
+**16** المساحة · **17** لا regex على تعليق · **18** التصغير بلا قص · **19** صوته كما دخل · **20** الخلفية الحيّة ·
+**21** الهوية من ملفه الحالي · **22** المنوَّر إيجابي · **23** الصورة مع كلمتها · **24** لا تمسح قبل التأكد · **25** المشاهد متّصلة ·
+**26** الصوت مع كل وحدة · **27** اسمع بأذنه · **28** إدارة اللون · **29** التقديم للصاعد فقط · **30** الكرت ضيّق ·
+**31** الشكل يحمل المعنى · **32–46** تفاصيل الرسم والنص · **47** الكلمة المدموجة · **48** لا تحذف قبل المراجعة ·
+**49** الرسمة بعد الانتقال · **50** الوميض · **51** قفزات المصدر · **52** تصحيح الكلمة بصرياً · **53** قِس قبل ما تقص ·
+**54–56** حاكم المؤثرات · **57–62** وضوح الرسم · **63** السجل · **64** التغطية · **65** لغته · **66** المشكلة مو بالشكل ·
+**67–68** الرندر · **69–72** الصوت والصورة · **74–75** ريموشن والقالب · **76** الكابشن · **77** الصيغ الأربع ·
+**78–81** النوافذ والجمود والفاحص · **82** حد الرسم فوق رأسه لكل شخص · **83–88** الأصوات والصور والجودة والمراجع ·
+**89** الصور المولّدة · **90** اللون مقيس · **91** القطع على رفع النظر · **92** قطع حاد · **93–100** لوح المخطط ·
+**101–118** القطع والكاميرا والرسوم البيانية والومضات والتوقيت.
+
+## خريطة السكربتات
+| | يسوي شنو | ماك | ويندوز |
+|---|---|---|---|
+| `00_setup.sh` | يكتشف الجهاز ويفحص وينزّل الناقص | Homebrew | winget |
+| `01_cut_plan.py` | يقيس السكتات ويطلع مقاطع الكلام | ✓ | ✓ |
+| `01b_transcribe.py` | التفريغ بتوقيت الكلمة → a.json | mlx-whisper | faster-whisper |
+| `02_captions.py` | توقيت كل كلمة على التايم-لاين الجديد | ✓ | ✓ |
+| `03_cut_zoom.py` | القص + الزوم + وسم الألوان | ✓ | ✓ |
+| `04b_remotion.sh` | يجهّز/يفتح/يرندر مشروع ريموشن | ✓ | ✓ |
+| `05_sfx.py` · `05b_sfx_audit.py` | أصوات مركّبة · حاكم المؤثرات | ✓ | ✓ |
+| `06b_master.sh` | العلو + ملف صوتي بالخلفية | ✓ | ✓ |
+| `07_contact_sheet.sh` | ورقة لقطات وحدة | ✓ | ✓ |
+| `09_srt.py` | ترجمة + نص الكابشن | ✓ | ✓ |
+| `10_script_edit.py` | شيل جملة من النص → تنشال من الفيديو | ✓ | ✓ |
+| `11_behind_text.js` | الكلام يمرّ ورا الشخص بالكشيدة | Vision | mediapipe |
+| `12_face_guard.js` | يكتشف وجهه ويرفض أي نافذة تقصّه | Vision | mediapipe |
+| `13_repeat_check.js` · `14_ledger.py` · `15_board.sh` | سجل الآليات ومنع التكرار | ✓ | ✓ |
+| `16_coverage_check.js` | فاحص الفراغ | ✓ | ✓ |
+| `18_stage_from_scenes.py` · `19_scene_audit.py` | جدول النوافذ · فراغ وجمود وشعر | ✓ | ✓ |
+| `20_voice_check.py` · `21_color_check.py` | صوته ولونه خرجوا كما دخلوا | ✓ | ✓ |
+| `22_preflight.py` | الفواحص كلها بأمر واحد | ✓ | ✓ |
+| `23_gaze_check.py` · `24_cut_align.py` · `25_flash_check.py` | النظرة · القطع · الومضات | ✓ | ✓ |
+| `make_theme.py` | يبني ملف الهوية من لونين وخط | ✓ | ✓ |
+| `ref_fetch.sh` · `ref_measure.py` | يحفظ مرجع بنترست · يقيس كاميرته وصوته | ✓ | ✓ |
+| `subjectcut.swift` · `ocrtext.swift` | قص موضوع من صورة · قراءة نص بصورة | Vision | rembg · tesseract |
+| `styles/collage/sound_add.py` | يضيف صوتاً لمكتبته (قص · تنعيم · معايرة) | ✓ | ✓ |
+| `styles/collage/mix_sfx.py` | مازج أصوات الكولاج والوثائقي واللوح | ✓ | ✓ |
+| `styles/collage/tv80s.py` · `halftone.py` | معالجة صور «تلفزيون الثمانينات» · نقش نقطي | ✓ | ✓ |
+| `styles/collage/kit/*.tsx` | عُدّة الكولاج (vox) · الوثائقي (editorial) · اللوح (board) | ✓ | ✓ |
+| المحرّك الخفيف: `04_render_frames.js` · `06_encode.sh` · `08*` | بديل لو ريموشن ما اشتغل — `references/light-engine.md` | ✓ | ✓ |
+
+
+## Repository installation
+
+This is the complete user-supplied engine originally named `video-editor-bassam`, packaged as `video-editor-salman`. Original source references and asset notices are retained; see [provenance](PROVENANCE.md) and [engine setup](references/engine.md). Read generated `references/local-install.md` when available for repository/runtime locations.
+
+For stream edits, load `references/stream-integration.md` and the adjacent `vods-editor` skill before following talking-head defaults. Use the same approved edit brief. Runtime packages and project-specific media are installed/generated separately.
+
+New installations store engine data in `~/Documents/video-editor-salman`. `VES_HOME` overrides it, followed by legacy `VEB_HOME`. If the legacy `~/Documents/video-editor-bassam` directory already exists, keep using it so existing projects and profiles remain available. No user data is included in this skill.

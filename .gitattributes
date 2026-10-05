@@ -5,4 +5,9 @@
 *.yml text eol=lf
 *.ts text eol=lf
 *.lua text eol=lf
+*.sh text eol=lf
+*.tsx text eol=lf
 *.png binary
+*.js text eol=lf
+*.html text eol=lf
+*.swift text eol=lf
