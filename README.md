@@ -20,6 +20,33 @@ The assistant checks your PC, installs what is missing with your approval, sets 
 
 The manual steps below do the same thing by hand.
 
+## How it works, step by step
+
+<p align="center"><img src="docs/images/walkthrough/00-overview.jpg" alt="VODs Editor" width="100%"></p>
+
+*Frames from the explainer animation. Interfaces are illustrative mock-ups (محاكاة توضيحية), not screenshots.*
+
+### First time: setup (once)
+
+| | |
+|---|---|
+| **1. Copy the repo link** · انسخ لينك المشروع<br><img src="docs/images/walkthrough/01-copy-link.jpg" alt="Copy the repository link from GitHub"> | **2. Paste it into Claude Code** · الصقه في Claude Code<br><img src="docs/images/walkthrough/02-paste-in-claude.jpg" alt="Paste the link and the setup message into Claude Code"> |
+| **3. It checks your PC and asks** · يفحص جهازك ويسألك<br><img src="docs/images/walkthrough/03-setup-check.jpg" alt="Tool checks, Resolve Free or Studio, and the data folder"> | **4. It installs skills and tools** · يجهّز الأدوات والمهارات<br><img src="docs/images/walkthrough/04-setup-install.jpg" alt="Installing the skills, Whisper and the Resolve connection"> |
+| **5. Start the bridge in Resolve Free** · شغّل البريدج في دافينشي<br><img src="docs/images/walkthrough/05-resolve-bridge.jpg" alt="Workspace, Scripts, resolve_mcp_bridge, then connected"> | **6. Restart the assistant** · أعد تشغيل المساعد<br><img src="docs/images/walkthrough/06-ready.jpg" alt="Restart so the vods-editor, video-editor-salman and davinci-resolve tools load"> |
+
+In Resolve Free, repeat step 5 every time you reopen Resolve. Resolve Studio uses **File → Setup AI Assistants** instead.
+
+### Every edit
+
+| | |
+|---|---|
+| **7. Send a stream link** · ابعت لينك الستريم<br><img src="docs/images/walkthrough/07-send-stream.jpg" alt="Paste a Twitch recording link and say what you want"> | **8. It downloads and analyzes** · يحمّل ويحلّل<br><img src="docs/images/walkthrough/08-analyze.jpg" alt="Link check, download, transcription and candidate moments"> |
+| **9. Pick the clips** · اختار المقاطع<br><img src="docs/images/walkthrough/09-pick-clips.jpg" alt="Select candidate clips instead of typing clip numbers"> | **10. Choose the style** · اختار الستايل<br><img src="docs/images/walkthrough/10-style.jpg" alt="Editing style, captions, font, colors, zoom and shake"> |
+| **11. Approve a short preview** · وافق على المعاينة<br><img src="docs/images/walkthrough/11-preview.jpg" alt="Preview the hook, captions and motion before the full render"> | **12. Review and export** · راجع وصدّر<br><img src="docs/images/walkthrough/12-export.jpg" alt="Final checks, then 16:9 montage and 9:16 shorts"> |
+| **Next time** · المرات الجاية<br><img src="docs/images/walkthrough/13-next-time.jpg" alt="Twitch, YouTube, TikTok, Instagram or a local file"> | **Paste the link and start** · الصق اللينك وابدأ<br><img src="docs/images/walkthrough/14-paste-and-start.jpg" alt="github.com/ahmedsalman74/vods-editor"> |
+
+Setup happens once. After that you start the Resolve bridge, send a new recording, and say what you want from it.
+
 ## Choose your Resolve connection
 
 | Edition | Connection | Status |
