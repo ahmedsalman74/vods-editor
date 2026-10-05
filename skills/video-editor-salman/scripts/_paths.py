@@ -5,12 +5,11 @@ SKILL : مجلد المهارة نفسه (للقراءة فقط — ما نكت�
 HOME  : مجلد بيانات المستخدم. كل شي يخصّه ينحفظ هنا ويبقى بين المقاطع:
         profile.json (هويته) · voice.md (لغته) · mechanisms.json + LEDGER.md (سجل آلياته)
         dialect.json (لهجته) · sounds/ (مكتبة أصواته) · refs/ (مراجعه) · tools/ (أدوات منزّلة)
-        الافتراضي: ~/Documents/video-editor-bassam — ويتغيّر بمتغيّر البيئة VEB_HOME.
+        الافتراضي: ~/Documents/video-editor-salman — ويتغيّر بمتغيّر البيئة VEB_HOME.
 """
 import os, json
 SKILL = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-_legacy_home = os.path.join(os.path.expanduser("~"), "Documents", "video-editor-bassam")
-HOME = os.environ.get("VES_HOME") or os.environ.get("VEB_HOME") or (_legacy_home if os.path.isdir(_legacy_home) else os.path.join(os.path.expanduser("~"), "Documents", "video-editor-salman"))
+HOME = os.environ.get("VES_HOME") or os.environ.get("VEB_HOME") or os.path.join(os.path.expanduser("~"), "Documents", "video-editor-salman")
 
 def ensure():
     for d in ("", "sounds", "refs", "tools"):

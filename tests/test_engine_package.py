@@ -32,7 +32,7 @@ class EnginePackageTests(unittest.TestCase):
 
     def test_python_data_directory_priority_and_legacy_compatibility(self):
         with tempfile.TemporaryDirectory() as tmp:
-            home=Path(tmp);legacy=home/'Documents/video-editor-bassam'
+            home=Path(tmp);legacy=home/'Documents/previous-editor-data'
             def resolved(env):
                 spec=importlib.util.spec_from_file_location('engine_paths',ENGINE/'scripts/_paths.py')
                 module=importlib.util.module_from_spec(spec)
@@ -42,21 +42,21 @@ class EnginePackageTests(unittest.TestCase):
             self.assertEqual(resolved({}),home/'Documents/video-editor-salman')
             self.assertFalse((home/'Documents').exists())
             legacy.mkdir(parents=True)
-            self.assertEqual(resolved({}),legacy)
+            self.assertEqual(resolved({'VEB_HOME':str(legacy)}),legacy)
             self.assertEqual(resolved({'VEB_HOME':str(home/'old-override')}),home/'old-override')
             self.assertEqual(resolved({'VEB_HOME':str(legacy),'VES_HOME':str(home/'new-override')}),home/'new-override')
 
     @unittest.skipUnless(shutil.which('node'),'Node required for JavaScript checks')
     def test_javascript_data_directory_matches_python_contract(self):
         with tempfile.TemporaryDirectory() as tmp:
-            home=Path(tmp);legacy=home/'Documents/video-editor-bassam'
+            home=Path(tmp);legacy=home/'Documents/previous-editor-data'
             code="require('os').homedir=()=>process.env.ENGINE_TEST_HOME;console.log(require(process.env.ENGINE_PATHS).HOME)"
             def resolved(extra):
                 env=dict(os.environ);env.pop('VES_HOME',None);env.pop('VEB_HOME',None)
                 env.update(ENGINE_TEST_HOME=str(home),ENGINE_PATHS=str(ENGINE/'scripts/_paths.js'));env.update(extra)
                 return Path(subprocess.check_output([shutil.which('node'),'-e',code],env=env,text=True).strip())
             self.assertEqual(resolved({}),home/'Documents/video-editor-salman')
-            legacy.mkdir(parents=True);self.assertEqual(resolved({}),legacy)
+            legacy.mkdir(parents=True);self.assertEqual(resolved({'VEB_HOME':str(legacy)}),legacy)
             self.assertEqual(resolved({'VEB_HOME':str(home/'old-override')}),home/'old-override')
             self.assertEqual(resolved({'VEB_HOME':str(legacy),'VES_HOME':str(home/'new-override')}),home/'new-override')
 

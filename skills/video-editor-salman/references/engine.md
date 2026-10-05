@@ -32,6 +32,6 @@ Use real previews, verify Arabic shaping and clip boundaries, and run applicable
 
 ## Data and attribution
 
-`VES_HOME` selects the engine's data directory; legacy `VEB_HOME` is also accepted. Existing legacy data directories are reused. Fresh users default to `~/Documents/video-editor-salman`. The VOD helper's selected data directory is separate; set `VES_HOME` to its `engine` subfolder if you want everything on the same drive.
+`VES_HOME` selects the engine's data directory; legacy `VEB_HOME` is also accepted. Set either variable to an existing data folder to reuse it. Fresh users default to `~/Documents/video-editor-salman`. The VOD helper's selected data directory is separate; set `VES_HOME` to its `engine` subfolder if you want everything on the same drive.
 
-Read [provenance](../PROVENANCE.md) for the imported engine's license scope. The old ZIP importer remains a legacy local utility; it is no longer required for the included engine.
+See [license scope](../PROVENANCE.md) for component notices. No separate ZIP import is required.

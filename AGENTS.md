@@ -93,4 +93,4 @@ After the restart, load the `vods-editor` skill and follow it. It covers source 
 - Do not enter passwords, import browser cookies, or download content the user has no right to use.
 - Do not install Resolve, buy licenses, or change system settings.
 - Ask before changing an existing Resolve project, and never save or switch projects as a connection test.
-- The supplied engine formerly named `video-editor-bassam` is included under `video-editor-salman`. Preserve its source/asset notices and do not claim the root MIT license covers it. See its provenance notice. Its inclusion does not install runtimes or prove all rendering paths are validated.
+- `video-editor-salman` is included. Follow its runtime setup and preserve applicable asset and dependency license notices.

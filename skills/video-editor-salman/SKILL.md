@@ -279,8 +279,8 @@ bash scripts/15_board.sh "<الاسم>" "<المسلَّم.mp4>"                
 
 ## Repository installation
 
-This is the complete user-supplied engine originally named `video-editor-bassam`, packaged as `video-editor-salman`. Original source references and asset notices are retained; see [provenance](PROVENANCE.md) and [engine setup](references/engine.md). Read generated `references/local-install.md` when available for repository/runtime locations.
+`video-editor-salman` includes the complete editing engine. See [engine setup](references/engine.md). Read generated `references/local-install.md` when available for repository/runtime locations.
 
 For stream edits, load `references/stream-integration.md` and the adjacent `vods-editor` skill before following talking-head defaults. Use the same approved edit brief. Runtime packages and project-specific media are installed/generated separately.
 
-New installations store engine data in `~/Documents/video-editor-salman`. `VES_HOME` overrides it, followed by legacy `VEB_HOME`. If the legacy `~/Documents/video-editor-bassam` directory already exists, keep using it so existing projects and profiles remain available. No user data is included in this skill.
+New installations store engine data in `~/Documents/video-editor-salman`. `VES_HOME` overrides it, followed by legacy `VEB_HOME`. To reuse an existing data folder, set one of these environment variables to its path. No user data is included in this skill.

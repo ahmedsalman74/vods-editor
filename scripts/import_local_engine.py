@@ -7,13 +7,15 @@ REPO=Path(__file__).resolve().parents[1]
 
 def validate_members(z, destination):
     entries=[];total=0
+    roots={PurePosixPath(i.filename.replace('\\','/')).parts[0] for i in z.infolist() if PurePosixPath(i.filename.replace('\\','/')).parts}
+    wrapper=next(iter(roots)) if len(roots)==1 and any(i.filename.replace('\\','/').rstrip('/')==next(iter(roots))+'/SKILL.md' for i in z.infolist()) else None
     for item in z.infolist():
         raw=item.filename.replace('\\','/')
         parts=PurePosixPath(raw).parts
         if not parts:continue
         if raw.startswith('/') or '..' in parts or any(':' in part for part in parts) or stat.S_ISLNK(item.external_attr>>16):
             raise ValueError('Unsafe archive member: '+raw)
-        if parts[0]=='video-editor-bassam':parts=parts[1:]
+        if parts[0]==wrapper:parts=parts[1:]
         if not parts:continue
         target=destination.joinpath(*parts).resolve()
         if not target.is_relative_to(destination.resolve()):raise ValueError('Archive entry escapes destination')

@@ -135,11 +135,11 @@ Your videos, profiles, cookies, client configuration, model weights and generate
 
 ### Complete motion/caption engine
 
-`skills/video-editor-salman` now includes the complete supplied engine formerly named `video-editor-bassam`: Arabic instructions, processing scripts, Remotion templates, styles/assets and validation tools. The stream integration rules used by the installed workflow are included. No extra engine ZIP is required.
+`skills/video-editor-salman` now includes the complete video editing engine: Arabic instructions, processing scripts, Remotion templates, styles/assets and validation tools. The stream integration rules used by the installed workflow are included. No extra engine ZIP is required.
 
 After the main setup, follow [engine runtime preparation](skills/video-editor-salman/references/engine.md). The assistant must check/install the selected renderer's dependencies and prepare the job inputs before rendering. The `--analysis` option alone does not install all engine dependencies. Templates require adaptation for the selected landscape/vertical layout and source FPS; a pasted link is an assisted setup entry point, not an instant render.
 
-The engine retains its original attribution and asset notices. **It is not covered by the root MIT license**; no blanket code license was included with the supplied copy. See [engine provenance](skills/video-editor-salman/PROVENANCE.md). Public availability should not be described as an unrestricted open-source grant for that imported code.
+
 
 ## Development and license
 
@@ -152,4 +152,4 @@ npm run build
 
 CI tests helpers and config preservation, then type-checks/builds the vendored bridge. It cannot test Resolve on GitHub-hosted runners. Windows is the supported setup path; other platforms have not been validated by this project.
 
-The original workflow helpers and `vods-editor` skill are [MIT licensed](LICENSE), excluding the imported `skills/video-editor-salman` directory as explained in its provenance notice. The vendored bridge remains copyright Saad Khan under its [MIT license](vendor/resolve-lua-mcp/LICENSE); see [third-party notices](THIRD_PARTY_NOTICES.md). Resolve, Claude, Codex, platform content and optional engines retain their respective terms. This is a community project, not an official Blackmagic, Anthropic or OpenAI product.
+The original workflow helpers and `vods-editor` skill are [MIT licensed](LICENSE), excluding `skills/video-editor-salman`; see [license scope](skills/video-editor-salman/PROVENANCE.md). The vendored bridge remains copyright Saad Khan under its [MIT license](vendor/resolve-lua-mcp/LICENSE); see [third-party notices](THIRD_PARTY_NOTICES.md). Resolve, Claude, Codex, platform content and optional engines retain their respective terms. This is a community project, not an official Blackmagic, Anthropic or OpenAI product.

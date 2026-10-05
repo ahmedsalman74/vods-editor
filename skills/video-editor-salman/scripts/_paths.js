@@ -1,9 +1,8 @@
 /* مسارات المهارة وبيانات المستخدم — نفس _paths.py بالضبط.
-   SKILL: مجلد المهارة (قراءة فقط) · HOME: بيانات المستخدم (~/Documents/video-editor-bassam أو VEB_HOME) */
+   SKILL: مجلد المهارة (قراءة فقط) · HOME: بيانات المستخدم (~/Documents/video-editor-salman أو VEB_HOME) */
 const path=require('path'), fs=require('fs'), os=require('os'), cp=require('child_process');
 const SKILL=path.join(__dirname,'..');
-const legacyHome=path.join(os.homedir(),'Documents','video-editor-bassam');
-const HOME=process.env.VES_HOME||process.env.VEB_HOME||(fs.existsSync(legacyHome)&&fs.statSync(legacyHome).isDirectory()?legacyHome:path.join(os.homedir(),'Documents','video-editor-salman'));
+const HOME=process.env.VES_HOME||process.env.VEB_HOME||path.join(os.homedir(),'Documents','video-editor-salman');
 function ensure(){ for(const d of ['','sounds','refs','tools']) fs.mkdirSync(path.join(HOME,d),{recursive:true}); return HOME; }
 function data(...p){ return path.join(HOME,...p); }
 /* أداة الرسم بالمتصفح: تُنزَّل مرة وحدة بمجلد بيانات المستخدم (tools/) لأن مجلد المهارة للقراءة فقط */

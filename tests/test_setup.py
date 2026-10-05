@@ -60,18 +60,18 @@ class ArchiveTests(unittest.TestCase):
     def archive(self,name,symlink=False):
         data=io.BytesIO()
         with ZipFile(data,'w') as z:
-            z.writestr('video-editor-bassam/SKILL.md','original attribution')
+            z.writestr('sample-engine/SKILL.md','original attribution')
             info=ZipInfo(name)
             if symlink:info.external_attr=(stat.S_IFLNK|0o777)<<16
             z.writestr(info,'data')
         data.seek(0);return ZipFile(data)
     def test_traversal_and_links_rejected(self):
         with tempfile.TemporaryDirectory() as tmp:
-            for name in ['../outside','/absolute','C:/absolute','video-editor-bassam/../../outside','safe:stream']:
+            for name in ['../outside','/absolute','C:/absolute','sample-engine/../../outside','safe:stream']:
                 with self.subTest(name=name),self.archive(name) as z,self.assertRaises(ValueError):importer.validate_members(z,Path(tmp))
             with self.archive('link',True) as z,self.assertRaises(ValueError):importer.validate_members(z,Path(tmp))
     def test_valid_import_stays_in_private_destination(self):
-        with tempfile.TemporaryDirectory() as tmp,self.archive('video-editor-bassam/scripts/helper.py') as z:
+        with tempfile.TemporaryDirectory() as tmp,self.archive('sample-engine/scripts/helper.py') as z:
             entries=importer.validate_members(z,Path(tmp))
             self.assertEqual(entries[0][1],Path(tmp).resolve()/'SKILL.md')
             self.assertTrue(all(p.is_relative_to(Path(tmp).resolve()) for _,p in entries))
