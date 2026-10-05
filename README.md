@@ -8,6 +8,18 @@ Choose your clips, captions, colors and motion style through the assistant's ava
 
 This is an assistant workflow, portable download/analysis helpers, and two skills—not a standalone automatic video editor. The assistant reviews candidates and uses Resolve tools to build the edit. Speech and loudness cues do not automatically recognize kills or funny moments.
 
+## Install by pasting the link
+
+Open **Claude Code** (or the **Code** tab in Claude Desktop, or Codex) in any folder and paste one of these messages:
+
+> Set up this video editing workflow for me: https://github.com/ahmedsalman74/vods-editor — read its AGENTS.md first and follow it step by step. Ask me before installing anything.
+
+> جهّزلي الورك فلو ده للمونتاج: https://github.com/ahmedsalman74/vods-editor — اقرا ملف AGENTS.md الأول وامشي عليه خطوة خطوة، واسألني قبل ما تنزّل أي حاجة، وكلّمني بالعربي.
+
+The assistant checks your PC, installs what is missing with your approval, sets up the skills and the Resolve connection, and tells you when to restart. Then send it a stream link to edit. You only need to do one thing yourself: click **Workspace → Scripts → resolve_mcp_bridge** in Resolve Free. AI assistants: see [AGENTS.md](AGENTS.md).
+
+The manual steps below do the same thing by hand.
+
 ## Choose your Resolve connection
 
 | Edition | Connection | Status |
